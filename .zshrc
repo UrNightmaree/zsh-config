@@ -19,6 +19,10 @@ typeset -A ZI
 ZI[BIN_DIR]="${HOME}/.zi/bin"
 source "${ZI[BIN_DIR]}/zi.zsh"
 
+path+=(
+    "$HOME/.local/bin"
+)
+
 for zscript in ~/.zdir/*.zsh; do
     source "$zscript"
 done

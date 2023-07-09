@@ -17,11 +17,13 @@
 
         AGKOZAK_CUSTOM_PROMPT=$'\n'
         # Directory
-        AGKOZAK_CUSTOM_PROMPT+=$'%B%F{$AGKOZAK_COLORS_PATH}%2v%f%b\n'
+        AGKOZAK_CUSTOM_PROMPT+=$'%B%F{$AGKOZAK_COLORS_PATH}%2v%f%b'
+        # Exec time
+        AGKOZAK_CUSTOM_PROMPT+=$'  %(9V.%F{$AGKOZAK_COLORS_CMD_EXEC_TIME}:: %9v%f.)\n'
         # Exit code & Job
         AGKOZAK_CUSTOM_PROMPT+=$'%(?..[%F{$AGKOZAK_COLORS_EXIT_STATUS}:%?%f%(1j..]\n))%(1j.%(?.[. )%F{$AGKOZAK_COLORS_BG_STRING}*%j%f]\n.)'
-        # Exec time & Prompt
-        AGKOZAK_CUSTOM_PROMPT+="%(9V.%F{$AGKOZAK_COLORS_CMD_EXEC_TIME}%9v%f .)%(?.%(4V.%F{$AGKOZAKTIDE_COLORS_PROMPT_VI}≈>%f.%F{$AGKOZAKTIDE_COLORS_PROMPT_NORMAL}=>%f).%F{$AGKOZAKTIDE_COLORS_PROMPT_NONZERO}=>%f) "
+        # Prompt
+        AGKOZAK_CUSTOM_PROMPT+="%(?.%(4V.%F{$AGKOZAKTIDE_COLORS_PROMPT_VI}≈>%f.%F{$AGKOZAKTIDE_COLORS_PROMPT_NORMAL}=>%f).%F{$AGKOZAKTIDE_COLORS_PROMPT_NONZERO}=>%f) "
 
         AGKOZAK_CUSTOM_RPROMPT=""
         # Git status
