@@ -1,4 +1,4 @@
-# The following lines were added by compinstall
+source <(curl -sL init.zshell.dev); zzinit
 
 zstyle ':completion:*' completer _complete _ignored
 zstyle :compinstall filename '/home/snake_naree/.zshrc'
@@ -23,6 +23,7 @@ path=(
     /home/snake_naree/.zi/polaris/sbin /home/snake_naree/.zi/polaris/bin
     /usr/local/sbin /usr/local/bin /usr/bin /usr/bin/site_perl 
     /usr/bin/vendor_perl /usr/bin/core_perl "$HOME/.local/bin"
+    "$HOME/.local/share/gem/ruby/3.0.0/bin"
 )
 
 for zscript in ~/.zdir/*.zsh; do

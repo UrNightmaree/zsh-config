@@ -14,7 +14,7 @@
         AGKOZAKTIDE_COLORS_PROMPT_NORMAL=76
         AGKOZAKTIDE_COLORS_PROMPT_VI=45
         AGKOZAKTIDE_COLORS_PROMPT_NONZERO=196
-        AGKOZAKTIDE_COLORS_CLOCK=default
+        AGKOZAKTIDE_COLORS_CLOCK=gray
 
         AGKOZAK_CUSTOM_PROMPT=$'\n'
         # Directory
@@ -49,8 +49,6 @@
         HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="fg=1,underline,bold"
     }
 
-    zi light "skywind3000/z.lua"; {}
-
     zi light "davidde/git"; {}
 
     zi light "cjayross/up"; {}
@@ -58,6 +56,9 @@
     zi light "jeffreytse/zsh-vi-mode"; {}
 
     zi light "hcgraf/zsh-sudo"; {}
+
+    zi ice has'zoxide'
+    zi light z-shell/zsh-zoxide; {}
 }
 
 # vim: set ts=4 sw=4 expandtab:
