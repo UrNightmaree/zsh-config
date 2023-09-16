@@ -1,0 +1,58 @@
+# Koreng Prompt
+
+add_newline = false
+format = """
+($jobs )($cmd_duration )${custom.random_cat} \
+[#](bold fg:#ff9966) [$username@$hostname](fg:#ffccb3) \
+[:](bold fg:#3399ff) $directory
+$status 
+"""
+right_format = """
+$git_branch$git_commit$git_status
+"""
+
+[custom.random_cat]
+when = true
+command = '''
+echo "${KORENG_CHRS: RANDOM % ${#KORENG_CHRS} :1}"
+'''
+format = "[$output](fg:none bg:none)"
+
+[username]
+show_always = true
+format = "[$user](fg:#ffe0b3)"
+
+[hostname]
+ssh_only = false
+format = "[$hostname](fg:#ffe0b3)"
+
+[directory]
+format = "[$path](fg:#b3d9ff)"
+
+[jobs]
+number_threshold = 1
+format = "[${number}j](fg:#e6b3ff)"
+
+[cmd_duration]
+format = "[$duration](fg:#33ccff)"
+
+[status]
+disabled = false
+symbol = "[$status%](fg:red bg:none)"
+success_symbol = "[$status%](fg:green bg:none)"
+not_executable_symbol = "[$status%](fg:red bg:none)"
+not_found_symbol = "[$status%](fg:red bg:none)"
+sigint_symbol = "[$status%](fg:red bg:none)"
+signal_symbol = "[$status%](fg:red bg:none)"
+map_symbol = true
+recognize_signal_code = true
+format = '[$symbol]($style)'
+
+[git_branch]
+format = "[$branch](fg:#66ff66)"
+
+[git_status]
+format = "( [$all_status$ahead_behind](fg:#66ff66))"
+
+[git_commit]
+format = "[$hash$tag](fg:#66ff66)"

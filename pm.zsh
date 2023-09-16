@@ -2,7 +2,8 @@
 }
 
 {# plugins
-    zi load "agkozak/agkozak-zsh-prompt"; {
+    command -v starship >/dev/null || {
+        zi load "agkozak/agkozak-zsh-prompt"
         bindkey -v
 
         AGKOZAK_CMD_EXEC_TIME=3
@@ -36,12 +37,12 @@
     zi light "zdharma-continuum/fast-syntax-highlighting"
 
     zi ice pick"zsh-autosuggestions.zsh"
-    zi light "zsh-users/zsh-autosuggestions"; {
+    zi light "zsh-users/zsh-autosuggestions" && {
         ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9399b2"
     }
 
     zi ice pick"zsh-history-substring-search.zsh"
-    zi light "zsh-users/zsh-history-substring-search"; {
+    zi light "zsh-users/zsh-history-substring-search" && {
         bindkey '^[[A' history-substring-search-up
         bindkey '^[[B' history-substring-search-down
 
@@ -49,16 +50,16 @@
         HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="fg=1,underline,bold"
     }
 
-    zi light "davidde/git"; {}
+    zi light "davidde/git" && {}
 
-    zi light "cjayross/up"; {}
+    zi light "cjayross/up" && {}
 
-    zi light "jeffreytse/zsh-vi-mode"; {}
+    zi light "jeffreytse/zsh-vi-mode" && {}
 
-    zi light "hcgraf/zsh-sudo"; {}
+    zi light "hcgraf/zsh-sudo" && {}
 
     zi ice has'zoxide'
-    zi light z-shell/zsh-zoxide; {}
+    zi light z-shell/zsh-zoxide && {}
 }
 
 # vim: set ts=4 sw=4 expandtab:
