@@ -52,6 +52,9 @@ format = '[$symbol]($style)'
 format = "[$branch](fg:#66ff66)"
 
 [git_status]
+ahead = "↑"
+behind = "↓"
+deleted = "×"
 format = "( [$all_status$ahead_behind](fg:#66ff66))"
 
 [git_commit]
