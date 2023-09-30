@@ -52,14 +52,19 @@
 
     zi light "davidde/git" && {}
 
-    zi light "cjayross/up" && {}
-
     zi light "jeffreytse/zsh-vi-mode" && {}
 
+    zi ice has'sudo'
     zi light "hcgraf/zsh-sudo" && {}
 
+    zi ice has'doas'
+    zi light "anatolykopyl/doas-zsh-plugin" && {}
+
     zi ice has'zoxide'
-    zi light z-shell/zsh-zoxide && {}
+    zi light "z-shell/zsh-zoxide" && {}
+
+    zi ice has'git' has'curl' pick'asdf.sh' cloneopts'--branch v0.13.1'
+    zi light "asdf-vm/asdf"
 }
 
 # vim: set ts=4 sw=4 expandtab:

@@ -1,6 +1,5 @@
 # Koreng Prompt
 
-add_newline = false
 format = """
 ($jobs )($cmd_duration )${custom.random_cat} \
 [#](bold fg:#ff9966) [$username@$hostname](fg:#ffccb3) \

@@ -23,20 +23,20 @@ ZI[BIN_DIR]="${HOME}/.zi/bin"
 source "${ZI[BIN_DIR]}/zi.zsh"
 
 path=(
-    /home/shuchi/.zi/polaris/sbin /home/shuchi/.zi/polaris/bin
-    /usr/local/sbin /usr/local/bin /usr/bin /usr/bin/site_perl 
-    /usr/bin/vendor_perl /usr/bin/core_perl "$HOME/.local/bin"
-    "$HOME/.local/share/gem/ruby/3.0.0/bin"
+    "$HOME/.zi/polaris/sbin" "$HOME/.zi/polaris/bin"
+    /usr/local/sbin /usr/local/bin /usr/bin "$HOME/.local/bin"
 )
+
+# make sure we don't populate path with non-existent path
+command -v ruby >/dev/null &&
+    path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
+command -v perl >/dev/null &&
+    path+=(/usr/bin/site_perl /usr/bin/vendor_perl /usr/bin/core_perl)
+[[ -d /opt/openresty ]] &&
+    path+=(/opt/openresty/bin)
 
 for zscript in ~/.zdir/*.zsh; do
     source "$zscript"
 done
-
-# start nvim config
-export NVIMDIR="/home/shuchi/.config/nvim"
-export NVIMLUA="/home/shuchi/.config/nvim/lua"
-export NVIMAFTERLUA="/home/shuchi/.config/nvim/after_lua"
-# end nvim config
 
 command -v starship >/dev/null && eval "$(starship init zsh)"

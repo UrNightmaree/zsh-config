@@ -16,3 +16,14 @@ export LC_ALL=en_US.UTF-8
 
 # add glamour style
 export GLAMOUR_STYLE="$HOME/.config/glow/mocha.json"
+
+# start nvim config
+export NVIMDIR="$HOME/.config/nvim"
+export NVIMLUA="$HOME/.config/nvim/lua"
+export NVIMAFTERLUA="$HOME/.config/nvim/after_lua"
+# end nvim config
+
+# add luarocks path to lua
+command -v luarocks >/dev/null && eval "$(luarocks path)"
+
+# vim: set tw=4 sw=4 expandtab :

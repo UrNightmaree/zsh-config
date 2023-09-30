@@ -1,3 +1,6 @@
-alias ls="exa --icons"
+alias ls="eza --icons"
 alias dog="bat -P"
-alias mdl='"$(command -v markdownlint-cli || command -v markdownlint-cli2)"'
+command -v doas >/dev/null && {
+    alias sudo="doas"
+    alias sudoedit="doas $EDITOR"
+}
