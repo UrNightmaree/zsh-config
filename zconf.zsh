@@ -23,7 +23,6 @@ export NVIMLUA="$HOME/.config/nvim/lua"
 export NVIMAFTERLUA="$HOME/.config/nvim/after_lua"
 # end nvim config
 
-# add luarocks path to lua
-command -v luarocks >/dev/null && eval "$(luarocks path)"
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
 # vim: set tw=4 sw=4 expandtab :
