@@ -28,8 +28,8 @@ command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
 # set git user.{name,email}
 if command -v git >/dev/null &&
- ! git config --global user.email &&
- ! git config --global user.name; then
+ ! git config --global user.email >/dev/null &&
+ ! git config --global user.name >/dev/null; then
     echo "Setup git"
     printf "Name: "
     read -r gitname
@@ -38,5 +38,7 @@ if command -v git >/dev/null &&
     git config --global user.name "$gitname"
     git config --global user.email "$gitemail"
 fi
+
+which asdf >/dev/null && . ~/.asdf/plugins/golang/set-env.zsh
 
 # vim: set tw=4 sw=4 expandtab :
