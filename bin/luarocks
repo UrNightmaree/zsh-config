@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+exec "$(command -v "$LUAROCKS" ||
+        command -v luarocks-5.4 ||
+        command -v luarocks-5.3 ||
+        command -v luarocks-5.2 ||
+        command -v luarocks-5.1 )" "$@"

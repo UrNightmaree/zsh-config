@@ -22,9 +22,10 @@ typeset -A ZI
 ZI[BIN_DIR]="${HOME}/.zi/bin"
 source "${ZI[BIN_DIR]}/zi.zsh"
 
-path=(
+path+=(
     "$HOME/.zi/polaris/sbin" "$HOME/.zi/polaris/bin"
     "$HOME/.local/bin" /usr/local/sbin /usr/local/bin /usr/bin 
+    "$HOME/.zdir/bin"
 )
 
 # make sure we don't populate path with non-existent path
@@ -34,9 +35,10 @@ command -v perl >/dev/null &&
     path+=(/usr/bin/site_perl /usr/bin/vendor_perl /usr/bin/core_perl)
 [[ -d /opt/openresty ]] &&
     path+=(/opt/openresty/bin)
-[[ -d ~/.bun ]] && {
+[[ -d ~/.bun ]] &&
     path+=("$HOME/.bun/bin")
-}
+[[ -d ~/.cache/rebar3 ]] &&
+    path+=("$HOME/.cache/rebar3/bin")
 
 for zscript in ~/.zdir/*.zsh; do
     source "$zscript"

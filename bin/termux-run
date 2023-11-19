@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+env PATH=/data/data/com.termux/files/usr/bin "$@"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+exec "$(command -v "$LUA" ||
+        command -v lua5.4 ||
+        command -v lua5.3 ||
+        command -v lua5.2 ||
+        command -v lua5.1 )" "$@"

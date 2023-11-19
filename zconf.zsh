@@ -24,7 +24,7 @@ export NVIMAFTERLUA="$HOME/.config/nvim/after_lua"
 # end nvim config
 
 # enable direnv
-command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+which direnv >/dev/null && eval "$(direnv hook zsh)"
 
 # set git user.{name,email}
 if command -v git >/dev/null &&

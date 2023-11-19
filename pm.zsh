@@ -1,7 +1,7 @@
 command -v starship >/dev/null || zi load "agkozak/agkozak-zsh-prompt"
 . ~/.zdir/config/prompt.zsh
 
-zi light "zdharma-continuum/fast-syntax-highlighting"
+zi light "z-shell/f-sy-h"
 
 zi ice pick"zsh-autosuggestions.zsh"
 zi light "zsh-users/zsh-autosuggestions"  
@@ -26,8 +26,5 @@ zi light "z-shell/zsh-zoxide"
 
 zi ice has'git' has'curl' pick'asdf.sh' cloneopts'--branch v0.13.1'
 zi light "asdf-vm/asdf"
-
-zi ice as'program' from'gh-r' mv'direnv* -> direnv'
-zi light "direnv/direnv"
 
 # vim: set ts=4 sw=4 expandtab:

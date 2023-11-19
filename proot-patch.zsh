@@ -12,4 +12,7 @@
     export COLORTERM='truecolor'
     export DEX2OATBOOTCLASSPATH='/apex/com.android.art/javalib/core-oj.jar:/apex/com.android.art/javalib/core-libart.jar:/apex/com.android.art/javalib/core-icu4j.jar:/apex/com.android.art/javalib/okhttp.jar:/apex/com.android.art/javalib/bouncycastle.jar:/apex/com.android.art/javalib/apache-xml.jar:/system/framework/framework.jar:/system/framework/ext.jar:/system/framework/telephony-common.jar:/system/framework/smartbondingservice.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/knoxanalyticssdk.jar:/system/framework/fipstimakeystore.jar:/system/framework/timakeystore.jar:/system/framework/knoxsdk.jar:/system/framework/drutils.jar:/system/framework/framework-atb-backward-compatibility.jar:/system/framework/SmpsManager.jar:/system/framework/esecomm.jar:/system/framework/uibc_java.jar:/system/framework/ICDVerification.jar'
     export EXTERNAL_STORAGE='/sdcard'
+
+    termux_path="/data/data/com.termux/files/usr/bin"
+    path=("${path[@]/$termux_path}")
 }
