@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+termux-run termux-clipboard-set "$@"

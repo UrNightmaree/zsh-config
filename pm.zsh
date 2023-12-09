@@ -27,4 +27,7 @@ zi light "z-shell/zsh-zoxide"
 zi ice has'git' has'curl' pick'asdf.sh' cloneopts'--branch v0.13.1'
 zi light "asdf-vm/asdf"
 
+zi ice has'git' pick'git-sync' as'program'
+zi light "simonthum/git-sync"
+
 # vim: set ts=4 sw=4 expandtab:
