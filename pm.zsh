@@ -30,4 +30,10 @@ zi light "asdf-vm/asdf"
 zi ice has'git' pick'git-sync' as'program'
 zi light "simonthum/git-sync"
 
+zi ice as'completion' has'eza' pick'completions/zsh/_eza'
+zi light "eza-community/eza"
+
+zi ice wait lucid has'eza' atinit'AUTOCD=1'
+zi light z-shell/zsh-eza
+
 # vim: set ts=4 sw=4 expandtab:

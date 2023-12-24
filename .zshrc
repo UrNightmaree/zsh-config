@@ -45,3 +45,6 @@ for zscript in ~/.zdir/*.zsh; do
 done
 
 command -v starship >/dev/null && eval "$(starship init zsh)"
+
+# bun completions
+[ -s "/home/naree/.bun/_bun" ] && source "/home/naree/.bun/_bun"
