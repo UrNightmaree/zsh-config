@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-exec "$(command -v "$FENNEL" ||
-        command -v fennel5.4 ||
-        command -v fennel5.3 ||
-        command -v fennel5.2 ||
-        command -v fennel5.1 )" "$@"

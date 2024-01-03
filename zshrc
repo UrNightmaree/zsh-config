@@ -1,0 +1,134 @@
+export ZPLUG_HOME="$HOME/.zplug"
+[[ -d ~/.zplug ]] || git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
+source ~/.zplug/init.zsh
+
+###<===[  loading up funs  ]===>###
+
+zplug 'z-shell/f-sy-h'
+
+zplug 'zsh-users/zsh-autosuggestions'
+
+zplug 'zsh-users/zsh-history-substring-search'
+
+#zplug 'jeffreytse/zsh-vi-mode' # waiting for zsh-autocomplete fix
+
+zstyle '*:compinit' arguments -D -i -u -C -w
+zplug 'marlonrichert/zsh-autocomplete' 
+
+zplug 'hlissner/zsh-autopair', defer:2
+
+zplug 'davidde/git'
+
+AUTOCD=1
+zplug 'z-shell/zsh-eza', if:'command -v eza'
+
+zplug 'z-shell/zsh-zoxide', if:'command -v zoxide'
+
+zplug 'none9632/zsh-sudo', if:'command -v sudo'
+
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    read -q && { echo; zplug install; }
+fi
+
+zplug load
+
+###<===[ let the fun begin ]===>###
+
+#~ general setup
+
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+
+fpath+=( ~/.zfunctions )
+autoload -Uz has_command
+
+if ! has_command starship; then
+    >&2 echo "Starship is required to initialize the prompt."
+    return 1
+fi
+
+export KORENG_CHRS='🐱😺😸😹😻😼😽🙀😿😾'
+source <(starship init zsh)
+
+#~ set f-sy-h theme
+
+[[ -f ~/.config/f-sy-h/catppuccin.ini ]] || { mkdir -p ~/.config/f-sy-h; curl -Lo ~/.config/f-sy-h/catppuccin.ini "https://github.com/catppuccin/zsh-fsh/blob/main/themes/catppuccin-mocha.ini?raw=true"; }
+[[ "$(fast-theme -s)" == *catppuccin* ]] || fast-theme catppuccin
+
+#~ set zsh-autosuggestions config
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#45475a"
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+
+#~ set zsh-autocomplete config
+
+bindkey '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
+bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+
+bindkey -M menuselect '\r' .accept-line
+
+#~ setup git first, and gh if it's exist.
+
+(){
+    local header=1
+    if ! git config user.name >/dev/null; then
+        (( header )) && { echo "## Setting up git..."; header=0; }
+        read -r -p "Your git username: " gitname
+        git config --global user.name "$gitname"
+    fi
+    if ! git config user.email >/dev/null; then
+        (( header )) && echo "## Setting up git..."
+        read -r -p "Your git email: " gitemail
+        git config --global user.email "$gitemail"
+    fi
+}
+
+(){
+    ! has_command gh && return 0
+    gh auth status >/dev/null 2>&1 && return 0
+    
+    echo "Detected gh command, setting up gh..."
+    gh auth login
+}
+
+#~ set EDITOR and PAGER, only if it exist.
+
+: ${EDITOR:=$(command -v nvim)}
+: ${PAGER:=$(command -v moar)}
+export EDITOR PAGER
+export LESSHISTFILE=- # damn you less, you're cluttering your histfile in $HOME!
+
+#~ setup nnn theme
+
+BLK="03" CHR="03" DIR="04" EXE="02" REG="07" HARDLINK="05" SYMLINK="05" MISSING="08" ORPHAN="01" FIFO="06" SOCK="03" UNKNOWN="01"
+
+export NNN_COLORS="#04020301;4231"
+
+export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$UNKNOWN"
+
+#~ use diff-so-fancy if exist, because we aren't robot.
+
+if has_command diff-so-fancy; then
+    git config --global core.pager "diff-so-fancy | less --tabs=4 -RF"
+    git config --global interactive.diffFilter "diff-so-fancy --patch"
+fi
+
+#~ default diff color looks ugly, use the fancy one.
+
+git config --global color.ui true
+
+git config --global color.diff-highlight.oldNormal    "red bold"
+git config --global color.diff-highlight.oldHighlight "red bold 52"
+git config --global color.diff-highlight.newNormal    "green bold"
+git config --global color.diff-highlight.newHighlight "green bold 22"
+
+git config --global color.diff.meta       "11"
+git config --global color.diff.frag       "magenta bold"
+git config --global color.diff.func       "146 bold"
+git config --global color.diff.commit     "yellow bold"
+git config --global color.diff.old        "red bold"
+git config --global color.diff.new        "green bold"
+git config --global color.diff.whitespace "red reverse"
