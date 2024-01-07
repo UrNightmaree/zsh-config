@@ -12,4 +12,4 @@
 
 ## Setup
 
-Symlink all files and directories with prefix "." to `~, except for Starship config (place it in usual `~/.config`).
+Symlink all files and directories with prefix "." to `~`, except for Starship config (place it in usual `~/.config`).
