@@ -41,6 +41,8 @@ HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
 
+path+=( ~/.bin )
+
 fpath+=( ~/.zfunctions )
 autoload -Uz has_command
 
@@ -54,8 +56,8 @@ source <(starship init zsh)
 
 #~ set f-sy-h theme
 
-[[ -f ~/.config/f-sy-h/catppuccin.ini ]] || { mkdir -p ~/.config/f-sy-h; curl -Lo ~/.config/f-sy-h/catppuccin.ini "https://github.com/catppuccin/zsh-fsh/blob/main/themes/catppuccin-mocha.ini?raw=true"; }
-[[ "$(fast-theme -s)" == *catppuccin* ]] || fast-theme catppuccin
+[[ -e ~/.config/f-sy-h/catppuccin.ini ]] || { mkdir -p ~/.config/f-sy-h; curl -Lo ~/.config/f-sy-h/catppuccin.ini "https://github.com/catppuccin/zsh-fsh/blob/main/themes/catppuccin-mocha.ini?raw=true"; }
+[[ "$(fast-theme -s)" == *catppuccin* ]] || fast-theme CONFIG:catppuccin
 
 #~ set zsh-autosuggestions config
 
@@ -74,14 +76,16 @@ bindkey -M menuselect '\r' .accept-line
 
 (){
     local header=1
-    if ! git config user.name >/dev/null; then
+    if [[ -z "$(git config user.name)" ]]; then
         (( header )) && { echo "## Setting up git..."; header=0; }
-        read -r -p "Your git username: " gitname
+	printf "Your git username: "
+        read -r gitname
         git config --global user.name "$gitname"
     fi
-    if ! git config user.email >/dev/null; then
+    if [[ -z "$(git config user.email)" ]]; then
         (( header )) && echo "## Setting up git..."
-        read -r -p "Your git email: " gitemail
+	printf "Your git email: "
+        read -r gitemail
         git config --global user.email "$gitemail"
     fi
 }
@@ -132,3 +136,7 @@ git config --global color.diff.commit     "yellow bold"
 git config --global color.diff.old        "red bold"
 git config --global color.diff.new        "green bold"
 git config --global color.diff.whitespace "red reverse"
+
+#~ options (must always in the end of the rc file)
+
+setopt autocd

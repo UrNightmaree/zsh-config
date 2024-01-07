@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+silent() {
+    local cmd="$1"
+    shift
+    "$cmd" "$@" >/dev/null 2>&1
+}
+
+usage() {
+    cat <<EOF
+Usage: $0 subcommand ...
+
+- Pull Ren'Py saves from app data directory to local directory.
+- Push Ren'Py saves from local directory to app data directory.
+
+# Subcommands #
+pull: renpy-package-identifier renpy-dir
+push: renpy-dir renpy-package-identifier
+EOF
+    exit 1
+}
+
+dir_exist() {
+    [[ -d "$1/game" ]] || { >&2 echo "'$1' not a Ren'Py game dir, aborting..."; exit 1; }
+    adb shell "[ -d '/sdcard/Android/data/$2/files/saves' ]" || { >&2 echo "'$2' not a Ren'Py app game, aborting..."; exit 1; }
+}
+
+if ! silent command -v adb; then
+    >&2 echo "Can't find adb command, aborting..."
+    exit 1
+fi
+
+if ! silent adb get-state; then
+    >&2 echo "Can't find any devices, have you connected to the device yet?"
+    exit 1
+fi
+
+(( $# >= 3 )) || usage
+
+subcmd="$1"
+shift
+
+case "$subcmd" in
+    pull)
+        game_savedir="$2/game/saves"
+        app_savedir="/sdcard/Android/data/$1/files/saves"
+        dir_exist "$2" "$1"
+
+        mkdir -p "$2/game/saves"
+
+        while read -r d; do
+            d="${d##*/}"
+            mkdir -p "$game_savedir/$d"
+        done < <(adb shell "find $app_savedir -type d -not -path $app_savedir")
+
+        while read -r f; do
+            : "${f/$app_savedir\//}"
+            dir="${_%/*}"
+            adb pull "$f" "$game_savedir/$dir" 2>&1 &
+        done < <(adb shell "find $app_savedir -type f")
+        wait
+    ;;
+    push)
+        game_savedir="$1/game/saves"
+        app_savedir="/sdcard/Android/data/$2/files/saves"
+        dir_exist "$1" "$2"
+
+        while read -r d; do
+            d="${d##*/}"
+            adb shell "mkdir -p $app_savedir/$d"
+        done < <(find "$game_savedir" -type d -not -path "$game_savedir")
+
+        while read -r f; do
+            : "${f/$game_savedir\//}"
+            dir="${_%/*}"
+            adb push "$f" "$app_savedir/$dir" 2>&1 &
+        done < <(find "$game_savedir" -type f)
+        wait
+    ;;
+esac
