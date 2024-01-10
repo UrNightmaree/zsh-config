@@ -52,6 +52,7 @@ if ! has_command starship; then
 fi
 
 export KORENG_CHRS='🐱😺😸😹😻😼😽🙀😿😾'
+export STARSHIP_CONFIG="$HOME/.starship.toml"
 source <(starship init zsh)
 
 #~ set f-sy-h theme
