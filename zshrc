@@ -19,6 +19,7 @@ zplug 'hlissner/zsh-autopair', defer:2
 
 zplug 'davidde/git'
 
+alias x=z
 AUTOCD=1
 zplug 'z-shell/zsh-eza', if:'command -v eza'
 
@@ -28,10 +29,12 @@ zplug 'none9632/zsh-sudo', if:'command -v sudo'
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
-    read -q && { echo; zplug install; }
+    read -q
+    yn=$((!$?))
+    (( yn )) && { echo; zplug install; }
 fi
 
-zplug load
+{ (( yn )) && zplug load --verbose; } || zplug load
 
 ###<===[ let the fun begin ]===>###
 
@@ -41,7 +44,7 @@ HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
 
-path+=( ~/.bin )
+path+=( ~/.bin ~/.local/bin )
 
 fpath+=( ~/.zfunctions )
 autoload -Uz has_command
@@ -55,6 +58,19 @@ export KORENG_CHRS='🐱😺😸😹😻😼😽🙀😿😾'
 export STARSHIP_CONFIG="$HOME/.starship.toml"
 source <(starship init zsh)
 
+#~~ additional configs
+
+[[ -d /opt/openresty ]] && path+=( /opt/openresty/bin )
+
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL" ]] && path+=( "$BUN_INSTALL/bin" )
+
+export PARU_CONF="$HOME/.paru.conf"
+
+#~~ bun completion
+
+[[ -s "/home/komothecat/.bun/_bun" ]] && source "/home/komothecat/.bun/_bun"
+
 #~ set f-sy-h theme
 
 [[ -e ~/.config/f-sy-h/catppuccin.ini ]] || { mkdir -p ~/.config/f-sy-h; curl -Lo ~/.config/f-sy-h/catppuccin.ini "https://github.com/catppuccin/zsh-fsh/blob/main/themes/catppuccin-mocha.ini?raw=true"; }
@@ -64,14 +80,6 @@ source <(starship init zsh)
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#45475a"
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
-
-#~ set zsh-autocomplete config
-
-bindkey '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
-bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
-bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
-
-bindkey -M menuselect '\r' .accept-line
 
 #~ setup git first, and gh if it's exist.
 
@@ -114,10 +122,19 @@ export NNN_COLORS="#04020301;4231"
 
 export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$UNKNOWN"
 
+#~ setup nnn plugins
+
+sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)" >/dev/null 2>&1 || echo "failed to fetch nnn plugins"
+
+NNN_autojump="x:autojump;"
+NNN_preview='.:-!bat "$nnn";'
+
+export NNN_PLUG="$NNN_autojump$NNN_preview"
+
 #~ use diff-so-fancy if exist, because we aren't robot.
 
 if has_command diff-so-fancy; then
-    git config --global core.pager "diff-so-fancy | less --tabs=4 -RF"
+    git config --global core.pager "diff-so-fancy | moar"
     git config --global interactive.diffFilter "diff-so-fancy --patch"
 fi
 
