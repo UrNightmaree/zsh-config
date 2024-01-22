@@ -71,6 +71,10 @@ export PARU_CONF="$HOME/.paru.conf"
 
 [[ -s "/home/komothecat/.bun/_bun" ]] && source "/home/komothecat/.bun/_bun"
 
+#~~ direnv setup
+
+has_command direnv && source <(direnv hook zsh)
+
 #~ set f-sy-h theme
 
 [[ -e ~/.config/f-sy-h/catppuccin.ini ]] || { mkdir -p ~/.config/f-sy-h; curl -Lo ~/.config/f-sy-h/catppuccin.ini "https://github.com/catppuccin/zsh-fsh/blob/main/themes/catppuccin-mocha.ini?raw=true"; }
