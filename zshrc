@@ -1,5 +1,9 @@
+~/.bin/pfetch; echo
+
 export ZPLUG_HOME="$HOME/.zplug"
 [[ -d ~/.zplug ]] || git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
+
+SECONDS=0
 source ~/.zplug/init.zsh
 
 ###<===[  loading up funs  ]===>###
@@ -27,6 +31,9 @@ zplug 'z-shell/zsh-zoxide', if:'command -v zoxide'
 
 zplug 'none9632/zsh-sudo', if:'command -v sudo'
 
+fpath+=( ~/.zplug/repos/asdf-vm/asdf/completions )
+zplug 'asdf-vm/asdf', at:v0.14.0, use:asdf.sh
+
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
     read -q
@@ -35,8 +42,13 @@ if ! zplug check --verbose; then
 fi
 
 { (( yn )) && zplug load --verbose; } || zplug load
+printf $' \e[34m›≫\e[m \e[36mzplug setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
+ZPLUG_SECOND="$SECONDS"
+unset SECONDS
 
 ###<===[ let the fun begin ]===>###
+
+SECONDS=0
 
 #~ general setup
 
@@ -58,6 +70,8 @@ export KORENG_CHRS='🐱😺😸😹😻😼😽🙀😿😾'
 export STARSHIP_CONFIG="$HOME/.starship.toml"
 source <(starship init zsh)
 
+export LC_ALL=en_US.UTF-8
+
 #~~ additional configs
 
 [[ -d /opt/openresty ]] && path+=( /opt/openresty/bin )
@@ -74,6 +88,10 @@ export PARU_CONF="$HOME/.paru.conf"
 #~~ direnv setup
 
 has_command direnv && source <(direnv hook zsh)
+
+#~~ xmake setup
+
+[[ -d ~/.xmake ]] && source ~/.xmake/profile
 
 #~ set f-sy-h theme
 
@@ -114,11 +132,12 @@ ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
 #~ set EDITOR and PAGER, only if it exist.
 
 : ${EDITOR:=$(command -v nvim)}
-: ${PAGER:=$(command -v moar)}
+: ${PAGER:=$(command -v most)}
 export EDITOR PAGER
 export LESSHISTFILE=- # damn you less, you're cluttering your histfile in $HOME!
 
-#~ setup nnn theme
+#~ setup nnn
+
 
 BLK="03" CHR="03" DIR="04" EXE="02" REG="07" HARDLINK="05" SYMLINK="05" MISSING="08" ORPHAN="01" FIFO="06" SOCK="03" UNKNOWN="01"
 
@@ -126,20 +145,24 @@ export NNN_COLORS="#04020301;4231"
 
 export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$UNKNOWN"
 
+
 #~ setup nnn plugins
 
-sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)" >/dev/null 2>&1 || echo "failed to fetch nnn plugins"
+if has_command nnn; then
+    sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)" >/dev/null 2>&1 || echo "failed to fetch nnn plugins"
 
-NNN_autojump="x:autojump;"
-NNN_preview='.:-!bat "$nnn";'
+    NNN_autojump="x:autojump;"
+    NNN_preview='.:-!bat "$nnn";'
 
-export NNN_PLUG="$NNN_autojump$NNN_preview"
+    export NNN_PLUG="$NNN_autojump$NNN_preview"
+fi
 
 #~ use diff-so-fancy if exist, because we aren't robot.
 
 if has_command diff-so-fancy; then
-    git config --global core.pager "diff-so-fancy | moar"
+    git config --global core.pager "diff-so-fancy | most"
     git config --global interactive.diffFilter "diff-so-fancy --patch"
+
 fi
 
 #~ default diff color looks ugly, use the fancy one.
@@ -159,6 +182,20 @@ git config --global color.diff.old        "red bold"
 git config --global color.diff.new        "green bold"
 git config --global color.diff.whitespace "red reverse"
 
+#~ util commands
+
+autoload -Uz \
+    up
+
+alias ..=up
+
 #~ options (must always in the end of the rc file)
 
 setopt autocd
+
+printf $' \e[34m›≫\e[m \e[36mzsh setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
+SETUP_SECOND="$SECONDS"
+unset SECONDS
+
+printf $' \e[34m›≫\e[m \e[36mwhole setup took\e[m \e[32m%ds\e[m\n' "$(( ZPLUG_SECOND + SETUP_SECOND ))"
+unset {ZPLUG,SETUP}_SECOND

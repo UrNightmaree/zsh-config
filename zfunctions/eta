@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+() {
+    TIMEFMT=$'\e[34;1mnotice\e[m\e[34m ›≫›\e[m \e[33m`'"$*"$'`\e[m \e[36mtook\e[m \e[32m%E\e[m'
+    time "$@"
+    unset TIMEFMT
+} "$@"
