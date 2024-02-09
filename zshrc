@@ -42,7 +42,7 @@ if ! zplug check --verbose; then
 fi
 
 { (( yn )) && zplug load --verbose; } || zplug load
-printf $' \e[34m›≫\e[m \e[36mzplug setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
+printf $' \e[34m›»\e[m \e[36mzplug setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
 ZPLUG_SECOND="$SECONDS"
 unset SECONDS
 
@@ -193,9 +193,9 @@ alias ..=up
 
 setopt autocd
 
-printf $' \e[34m›≫\e[m \e[36mzsh setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
+printf $' \e[34m›»\e[m \e[36mzsh setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
 SETUP_SECOND="$SECONDS"
 unset SECONDS
 
-printf $' \e[34m›≫\e[m \e[36mwhole setup took\e[m \e[32m%ds\e[m\n' "$(( ZPLUG_SECOND + SETUP_SECOND ))"
+printf $' \e[34m›»\e[m \e[36mwhole setup took\e[m \e[32m%ds\e[m\n' "$(( ZPLUG_SECOND + SETUP_SECOND ))"
 unset {ZPLUG,SETUP}_SECOND
