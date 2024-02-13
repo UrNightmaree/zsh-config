@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+() {
+    printf $' \e[34m›»\e[m \e[36m%s\e[m\n' "$*"
+} "$@"

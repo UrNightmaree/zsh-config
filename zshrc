@@ -1,9 +1,10 @@
 ~/.bin/pfetch; echo
+fpath+=( ~/.zfunctions )
 
+SECONDS=0
 export ZPLUG_HOME="$HOME/.zplug"
 [[ -d ~/.zplug ]] || git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
 
-SECONDS=0
 source ~/.zplug/init.zsh
 
 ###<===[  loading up funs  ]===>###
@@ -34,15 +35,17 @@ zplug 'none9632/zsh-sudo', if:'command -v sudo'
 fpath+=( ~/.zplug/repos/asdf-vm/asdf/completions )
 zplug 'asdf-vm/asdf', at:v0.14.0, use:asdf.sh
 
+autoload -Uz myecho
+
 if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
+    printf "%s" "$(myecho "Install? [y/N]: ")"
     read -q
     yn=$((!$?))
     (( yn )) && { echo; zplug install; }
 fi
 
 { (( yn )) && zplug load --verbose; } || zplug load
-printf $' \e[34m›»\e[m \e[36mzplug setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
+myecho $'zplug setup took \e[32m'"${SECONDS}s"
 ZPLUG_SECOND="$SECONDS"
 unset SECONDS
 
@@ -58,7 +61,6 @@ SAVEHIST=1000
 
 path+=( ~/.bin ~/.local/bin )
 
-fpath+=( ~/.zfunctions )
 autoload -Uz has_command
 
 if ! has_command starship; then
@@ -103,32 +105,6 @@ has_command direnv && source <(direnv hook zsh)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#45475a"
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
 
-#~ setup git first, and gh if it's exist.
-
-(){
-    local header=1
-    if [[ -z "$(git config user.name)" ]]; then
-        (( header )) && { echo "## Setting up git..."; header=0; }
-	printf "Your git username: "
-        read -r gitname
-        git config --global user.name "$gitname"
-    fi
-    if [[ -z "$(git config user.email)" ]]; then
-        (( header )) && echo "## Setting up git..."
-	printf "Your git email: "
-        read -r gitemail
-        git config --global user.email "$gitemail"
-    fi
-}
-
-(){
-    ! has_command gh && return 0
-    gh auth status >/dev/null 2>&1 && return 0
-    
-    echo "Detected gh command, setting up gh..."
-    gh auth login
-}
-
 #~ set EDITOR and PAGER, only if it exist.
 
 : ${EDITOR:=$(command -v nvim)}
@@ -145,7 +121,6 @@ export NNN_COLORS="#04020301;4231"
 
 export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$UNKNOWN"
 
-
 #~ setup nnn plugins
 
 if has_command nnn; then
@@ -156,31 +131,6 @@ if has_command nnn; then
 
     export NNN_PLUG="$NNN_autojump$NNN_preview"
 fi
-
-#~ use diff-so-fancy if exist, because we aren't robot.
-
-if has_command diff-so-fancy; then
-    git config --global core.pager "diff-so-fancy | most"
-    git config --global interactive.diffFilter "diff-so-fancy --patch"
-
-fi
-
-#~ default diff color looks ugly, use the fancy one.
-
-git config --global color.ui true
-
-git config --global color.diff-highlight.oldNormal    "red bold"
-git config --global color.diff-highlight.oldHighlight "red bold 52"
-git config --global color.diff-highlight.newNormal    "green bold"
-git config --global color.diff-highlight.newHighlight "green bold 22"
-
-git config --global color.diff.meta       "11"
-git config --global color.diff.frag       "magenta bold"
-git config --global color.diff.func       "146 bold"
-git config --global color.diff.commit     "yellow bold"
-git config --global color.diff.old        "red bold"
-git config --global color.diff.new        "green bold"
-git config --global color.diff.whitespace "red reverse"
 
 #~ util commands
 
@@ -193,9 +143,17 @@ alias ..=up
 
 setopt autocd
 
-printf $' \e[34m›»\e[m \e[36mzsh setup took\e[m \e[32m%ds\e[m\n' "$SECONDS"
+myecho $'zsh setup took\e[32m '"${SECONDS}s"
 SETUP_SECOND="$SECONDS"
 unset SECONDS
 
-printf $' \e[34m›»\e[m \e[36mwhole setup took\e[m \e[32m%ds\e[m\n' "$(( ZPLUG_SECOND + SETUP_SECOND ))"
+myecho $'whole setup took\e[32m '"$(( ZPLUG_SECOND + SETUP_SECOND ))s"
 unset {ZPLUG,SETUP}_SECOND
+
+: "$(dirs)"
+_dirs="${_//\~/$HOME}"
+echo "$_dirs" "$PWD"
+if [[ "$_dirs" != *"$PWD"* ]]; then
+    printf "%s" "$(myecho "Do you want to restore to your last session's cwd? [Y/n]: ")"]
+    read -q && popd
+fi
