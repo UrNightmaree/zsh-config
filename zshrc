@@ -15,10 +15,7 @@ zplug 'zsh-users/zsh-autosuggestions'
 
 zplug 'zsh-users/zsh-history-substring-search'
 
-#zplug 'jeffreytse/zsh-vi-mode' # waiting for zsh-autocomplete fix
-
-zstyle '*:compinit' arguments -D -i -u -C -w
-zplug 'marlonrichert/zsh-autocomplete' 
+zplug 'jeffreytse/zsh-vi-mode'
 
 zplug 'hlissner/zsh-autopair', defer:2
 
@@ -46,18 +43,19 @@ fi
 
 { (( yn )) && zplug load --verbose; } || zplug load
 myecho $'zplug setup took \e[32m'"${SECONDS}s"
-ZPLUG_SECOND="$SECONDS"
 unset SECONDS
 
 ###<===[ let the fun begin ]===>###
 
-SECONDS=0
-
 #~ general setup
 
+setopt append_history
+setopt share_history
 HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
+setopt hist_expire_dups_first
+setopt extended_history
 
 path+=( ~/.bin ~/.local/bin )
 
@@ -76,10 +74,10 @@ export LC_ALL=en_US.UTF-8
 
 #~~ additional configs
 
-[[ -d /opt/openresty ]] && path+=( /opt/openresty/bin )
+[[ -d /opt/openresty && "$PATH" != *:/opt/openresty/bin:* ]] && path+=( /opt/openresty/bin )
 
 export BUN_INSTALL="$HOME/.bun"
-[[ -d "$BUN_INSTALL" ]] && path+=( "$BUN_INSTALL/bin" )
+[[ -d "$BUN_INSTALL" && "$PATH" != *":$BUN_INSTALL/bin:"* ]] && path+=( "$BUN_INSTALL/bin" )
 
 export PARU_CONF="$HOME/.paru.conf"
 
@@ -90,6 +88,12 @@ export PARU_CONF="$HOME/.paru.conf"
 #~~ direnv setup
 
 has_command direnv && source <(direnv hook zsh)
+
+#~~ pnpm setup
+
+alias pn=pnpm
+export PNPM_HOME="/home/komo/.local/share/pnpm"
+has_command pnpm && [[ "$PATH" != *":$PNPM_HOME:"* ]] && path+=( "$PNPM_HOME" )
 
 #~~ xmake setup
 
@@ -142,18 +146,4 @@ alias ..=up
 #~ options (must always in the end of the rc file)
 
 setopt autocd
-
-myecho $'zsh setup took\e[32m '"${SECONDS}s"
-SETUP_SECOND="$SECONDS"
-unset SECONDS
-
-myecho $'whole setup took\e[32m '"$(( ZPLUG_SECOND + SETUP_SECOND ))s"
-unset {ZPLUG,SETUP}_SECOND
-
-: "$(dirs)"
-_dirs="${_//\~/$HOME}"
-echo "$_dirs" "$PWD"
-if [[ "$_dirs" != *"$PWD"* ]]; then
-    printf "%s" "$(myecho "Do you want to restore to your last session's cwd? [Y/n]: ")"]
-    read -q && popd
-fi
+setopt no_beep

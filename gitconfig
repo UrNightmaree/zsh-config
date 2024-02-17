@@ -6,7 +6,7 @@
 	helper = !/usr/bin/gh auth git-credential
 [user]
 	name = komothecat
-	email = afiqquraisyzulkarnain@gmail.com
+	email = 71205197+komothecat@users.noreply.github.com
 [color]
 	ui = true
 [color "diff-highlight"]
