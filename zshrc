@@ -15,6 +15,8 @@ load 'z-shell/f-sy-h'
 
 load 'jeffreytse/zsh-vi-mode'
 
+load 'z-shell/zsh-fancy-completions'
+
 load 'zsh-users/zsh-autosuggestions'
 
 load 'zsh-users/zsh-history-substring-search'
