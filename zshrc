@@ -11,14 +11,25 @@ zzinit
 +(){ zi ice "$@"; }
 load(){ zi light "$@"; }
 
+load 'z-shell/z-a-default-ice'
+
+zi default-ice lucid >/dev/null 2>&1
+
 load 'z-shell/f-sy-h'
 
++ atload'bindkey -v'
 load 'jeffreytse/zsh-vi-mode'
 
++ wait
 load 'z-shell/zsh-fancy-completions'
 
 load 'zsh-users/zsh-autosuggestions'
 
++ wait \
+  atload"bindkey '^[[A' history-substring-search-up
+         bindkey '^[[B' history-substring-search-down" \
+  atinit'HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="underline"
+         HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="underline fg=red"'
 load 'zsh-users/zsh-history-substring-search'
 
 + wait'2'
@@ -28,10 +39,10 @@ load 'davidde/git'
 
 MYPATCH="--branch patch-1"
 
-+ has'eza' atinit'AUTOCD=1' cloneopts"$MYPATCH"
++ wait has'eza' atinit'AUTOCD=1' cloneopts"$MYPATCH"
 load 'cattokomo/zsh-eza'
 
-+ has'zoxide' cloneopts"$MYPATCH"
++ wait has'zoxide' cloneopts"$MYPATCH"
 load 'cattokomo/zsh-zoxide'
 
 + has'sudo'
@@ -40,6 +51,10 @@ load 'none9632/zsh-sudo'
 + pick'asdf.sh' cloneopts'--branch v0.14.0'
 load 'asdf-vm/asdf'
 
++ atclone'dircolors -b LS_COLORS > clrs.zsh' \
+  atpull'%atclone' pick"clrs.zsh" nocompile'!' \
+  atload'zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}'
+load trapd00r/LS_COLORS
 
 unfunction + load
 
@@ -48,12 +63,6 @@ myecho $'load setup took \e[32m'"${SECONDS}s"
 unset SECONDS
 
 ###<===[ let the fun begin ]===>###
-
-#~ history substring
-
-bindkey -v
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
 
 #~ general setup
 
@@ -79,6 +88,8 @@ export STARSHIP_CONFIG="$HOME/.starship.toml"
 source <(starship init zsh)
 
 export LC_ALL=en_US.UTF-8
+
+zstyle ':completion:*' menu-select
 
 #~~ additional configs
 
@@ -109,7 +120,7 @@ has_command pnpm && [[ "$PATH" != *":$PNPM_HOME:"* ]] && path+=( "$PNPM_HOME" )
 
 #~ set f-sy-h theme
 
-[[ "$(fast-theme -s)" == *safari* ]] || fast-theme safari
+[[ "$FAST_THEME_NAME" == safari ]] || fast-theme safari
 
 #~ set zsh-autosuggestions config
 
