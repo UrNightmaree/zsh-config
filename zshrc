@@ -24,11 +24,13 @@ load 'hlissner/zsh-autopair'
 
 load 'davidde/git'
 
-+ has'eza' atinit'AUTOCD=1'
-load 'z-shell/zsh-eza'
+MYPATCH="--branch patch-1"
 
-+ has'zoxide'
-load 'z-shell/zsh-zoxide'
++ has'eza' atinit'AUTOCD=1' cloneopts"$MYPATCH"
+load 'cattokomo/zsh-eza'
+
++ has'zoxide' cloneopts"$MYPATCH"
+load 'cattokomo/zsh-zoxide'
 
 + has'sudo'
 load 'none9632/zsh-sudo'
