@@ -2,50 +2,54 @@
 fpath+=( ~/.zfunctions )
 
 SECONDS=0
-export ZPLUG_HOME="$HOME/.zplug"
-[[ -d ~/.zplug ]] || git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
-
-source ~/.zplug/init.zsh
+mkdir -p ~/.cache
+[[ -f ~/.cache/zii ]] || curl -fSsLo ~/.cache/zii init.zshell.dev
+source ~/.cache/zii
+zzinit
 
 ###<===[  loading up funs  ]===>###
++(){ zi ice "$@"; }
+load(){ zi light "$@"; }
 
-zplug 'z-shell/f-sy-h'
+load 'z-shell/f-sy-h'
 
-zplug 'zsh-users/zsh-autosuggestions'
+load 'jeffreytse/zsh-vi-mode'
 
-zplug 'zsh-users/zsh-history-substring-search'
+load 'zsh-users/zsh-autosuggestions'
 
-zplug 'jeffreytse/zsh-vi-mode'
+load 'zsh-users/zsh-history-substring-search'
 
-zplug 'hlissner/zsh-autopair', defer:2
++ wait'2'
+load 'hlissner/zsh-autopair'
 
-zplug 'davidde/git'
+load 'davidde/git'
 
-alias x=z
-AUTOCD=1
-zplug 'z-shell/zsh-eza', if:'command -v eza'
++ has'eza' atinit'AUTOCD=1'
+load 'z-shell/zsh-eza'
 
-zplug 'z-shell/zsh-zoxide', if:'command -v zoxide'
++ has'zoxide'
+load 'z-shell/zsh-zoxide'
 
-zplug 'none9632/zsh-sudo', if:'command -v sudo'
++ has'sudo'
+load 'none9632/zsh-sudo'
 
-fpath+=( ~/.zplug/repos/asdf-vm/asdf/completions )
-zplug 'asdf-vm/asdf', at:v0.14.0, use:asdf.sh
++ pick'asdf.sh' cloneopts'--branch v0.14.0'
+load 'asdf-vm/asdf'
+
+
+unfunction + load
 
 autoload -Uz myecho
-
-if ! zplug check --verbose; then
-    printf "%s" "$(myecho "Install? [y/N]: ")"
-    read -q
-    yn=$((!$?))
-    (( yn )) && { echo; zplug install; }
-fi
-
-{ (( yn )) && zplug load --verbose; } || zplug load
-myecho $'zplug setup took \e[32m'"${SECONDS}s"
+myecho $'load setup took \e[32m'"${SECONDS}s"
 unset SECONDS
 
 ###<===[ let the fun begin ]===>###
+
+#~ history substring
+
+bindkey -v
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 #~ general setup
 
@@ -101,8 +105,7 @@ has_command pnpm && [[ "$PATH" != *":$PNPM_HOME:"* ]] && path+=( "$PNPM_HOME" )
 
 #~ set f-sy-h theme
 
-[[ -e ~/.config/f-sy-h/catppuccin.ini ]] || { mkdir -p ~/.config/f-sy-h; curl -Lo ~/.config/f-sy-h/catppuccin.ini "https://github.com/catppuccin/zsh-fsh/blob/main/themes/catppuccin-mocha.ini?raw=true"; }
-[[ "$(fast-theme -s)" == *catppuccin* ]] || fast-theme CONFIG:catppuccin
+[[ "$(fast-theme -s)" == *safari* ]] || fast-theme safari
 
 #~ set zsh-autosuggestions config
 
