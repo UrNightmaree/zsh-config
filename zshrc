@@ -1,4 +1,4 @@
-~/.bin/pfetch; echo
+(( ZSHRC_SKIP_INTRO )) || { ~/.bin/pfetch; echo; }
 fpath+=( ~/.zfunctions )
 
 SECONDS=0
@@ -112,7 +112,9 @@ has_command direnv && source <(direnv hook zsh)
 
 alias pn=pnpm
 export PNPM_HOME="/home/komo/.local/share/pnpm"
-has_command pnpm && [[ "$PATH" != *":$PNPM_HOME:"* ]] && path+=( "$PNPM_HOME" )
+if [[ "$PATH" != *":$PNPM_HOME:"* ]]; then
+    path+=( "$PNPM_HOME" )
+fi
 
 #~~ xmake setup
 
