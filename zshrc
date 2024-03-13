@@ -1,4 +1,4 @@
-(( ZSHRC_SKIP_INTRO )) || { ~/.bin/pfetch; echo; }
+~/.bin/pfetch; echo
 fpath+=( ~/.zfunctions )
 
 SECONDS=0
@@ -88,6 +88,9 @@ export STARSHIP_CONFIG="$HOME/.starship.toml"
 source <(starship init zsh)
 
 export LC_ALL=en_US.UTF-8
+
+autoload -Uz compinit; compinit -C
+(autoload -Uz compinit; compinit &)
 
 zstyle ':completion:*' menu-select
 
