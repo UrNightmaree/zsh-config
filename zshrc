@@ -10,6 +10,7 @@ zzinit
 ###<===[  loading up funs  ]===>###
 +(){ zi ice "$@"; }
 load(){ zi light "$@"; }
+snippet(){ zi snippet "$@"; }
 
 load 'z-shell/z-a-default-ice'
 
@@ -55,6 +56,9 @@ load 'asdf-vm/asdf'
   atpull'%atclone' pick"clrs.zsh" nocompile'!' \
   atload'zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}'
 load trapd00r/LS_COLORS
+
++ pick'git-sync' as'program'
+snippet 'https://github.com/simonthum/git-sync/raw/master/git-sync'
 
 unfunction + load
 
