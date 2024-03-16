@@ -127,6 +127,14 @@ fi
 
 [[ -d ~/.xmake ]] && source ~/.xmake/profile
 
+#~~ cargo setup
+
+[[ -d ~/.cargo ]] && path+=( ~/.cargo/bin )
+
+#!! wait
+
+wait
+
 #~ set f-sy-h theme
 
 [[ "$FAST_THEME_NAME" == safari ]] || fast-theme safari
@@ -145,7 +153,6 @@ export LESSHISTFILE=- # damn you less, you're cluttering your histfile in $HOME!
 
 #~ setup nnn
 
-
 BLK="03" CHR="03" DIR="04" EXE="02" REG="07" HARDLINK="05" SYMLINK="05" MISSING="08" ORPHAN="01" FIFO="06" SOCK="03" UNKNOWN="01"
 
 export NNN_COLORS="#04020301;4231"
@@ -161,6 +168,14 @@ if has_command nnn; then
     NNN_preview='.:-!bat "$nnn";'
 
     export NNN_PLUG="$NNN_autojump$NNN_preview"
+fi
+
+#~ sigi alias
+
+if has_command sigi; then
+  alias \
+    todo="sigi -t todo" \
+    ideas="sigi -t ideas"
 fi
 
 #~ util commands
